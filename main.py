@@ -4,6 +4,7 @@ from query_analyser import Analyser
 from reply_handler import Reply
 
 client = discord.Client()
+botSettings = BotSettings('bot_settings.json')
 
 # Event for whenever the bot is ready.
 @client.event
@@ -25,13 +26,12 @@ async def on_message(message):
         arguments = Analyser(message.content).find_arguments()
 
         # Based on arguments find out how to reply to user.
-        reply_object = Reply(arguments)
+        reply_object = Reply(arguments, botSettings.settings['APIUrl'])
         reply_arguments = reply_object.get_arguments()
         reply_message = reply_object.get_reply()
 
         # Yeet the reply back to the user.
         await message.channel.send(reply_message)
 
-# Load the bot settings and initialize the bot.
-botSettings = BotSettings('bot_settings.json')
+# Initialize the bot.
 client.run(botSettings.settings['Token'])

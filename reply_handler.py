@@ -1,7 +1,8 @@
 class Reply:
 
-    def __init__(self, arguments):
+    def __init__(self, arguments, api_url):
         self.arguments = arguments
+        self.url = api_url
         self.possible_arguments = ['-cat', '-pop', '-ord', '-help']
         self.category = None
         self.popularity = None
@@ -48,16 +49,25 @@ class Reply:
         
         output = ""
 
-        # Check if category is set.
-        if self.category is not None:
-            output = output + 'Category: ' + self.category + ' '
+        # If no arguments are given, return the default reply.
+        if self.arguments == []:
+            output = "Returns a random coub from a random category."
+            return output
 
-        # Check if popularity is set.
+        # If popularity is set, then generate a response based on the arguments.
         if self.popularity is not None:
-            output = output + 'Popularity: ' + self.popularity + ' '
-        
-        # Check if order is set.
-        if self.order is not None:
-            output = output + 'Order: ' + self.order + ' '
+            output = f"Popular {self.popularity}"
+            
+            # Now check if category is set.
+            if self.category is not None:
+                output += f" in {self.category}"
 
-        return "You searched for " + output.strip()
+            # Check if ordering is set.
+            if self.order is not None:
+                output += f" ordered by {self.order}"
+
+            return output
+
+        # If we get to this point, then popularity is not set, and we're just getting a random coub from a specific category.
+        output = f"Random coub in {self.category}"
+        return output
