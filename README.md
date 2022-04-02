@@ -41,3 +41,4 @@ Replies with the nth-most popular coub from a specific category.
 # To-do
 
 - Make sure, after downloading a video and displaying it, that said video is deleted from local storage.
+- Yeet all code over to a src folder.
