@@ -33,7 +33,7 @@ Replies with a random coub from a specific category.
 Replies with the most popular coub in the archive.
 - !qoub -pop &lt;nth-popular&gt; <br />
 Replies with the nth-most popular coub in the archive.
-- !qoub -order &lt;likes / views&gt; <br />
+- !qoub -ord &lt;likes / views&gt; <br />
 Changes the fildering mode for the popular argument.
 - !qoub -cat &lt;category&gt; -pop &lt;nth-popular&gt; <br/>
 Replies with the nth-most popular coub from a specific category.
