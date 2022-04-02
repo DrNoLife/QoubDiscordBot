@@ -37,3 +37,7 @@ Replies with the nth-most popular coub in the archive.
 Changes the fildering mode for the popular argument.
 - !qoub -cat &lt;category&gt; -pop &lt;nth-popular&gt; <br/>
 Replies with the nth-most popular coub from a specific category.
+
+# To-do
+
+- Make sure, after downloading a video and displaying it, that said video is deleted from local storage.

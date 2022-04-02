@@ -1,3 +1,8 @@
+from numpy import full
+import requests
+import urllib.parse
+import urllib.request
+
 class Reply:
 
     def __init__(self, arguments, api_url):
@@ -44,30 +49,77 @@ class Reply:
                 -ord: Order to search for.
                 '''
 
-    # Get the reply based on the arguments.
-    def get_reply(self):
-        
-        output = ""
-
-        # If no arguments are given, return the default reply.
-        if self.arguments == []:
-            output = "Returns a random coub from a random category."
-            return output
+    # Get the url based on the arguments.
+    def get_url(self):
+        url = self.url
 
         # If popularity is set, then generate a response based on the arguments.
         if self.popularity is not None:
-            output = f"Popular {self.popularity}"
-            
+            url += f"Popular?NthMostPopular={self.popularity}"
+
             # Now check if category is set.
             if self.category is not None:
-                output += f" in {self.category}"
+                url += f"&Category={self.category}"
 
             # Check if ordering is set.
             if self.order is not None:
-                output += f" ordered by {self.order}"
+                if self.order == "views":
+                    url += f"&SortByLikes=true"
 
-            return output
+            return url
 
-        # If we get to this point, then popularity is not set, and we're just getting a random coub from a specific category.
-        output = f"Random coub in {self.category}"
-        return output
+        # Check if we need a random coub from a specific category.
+        if self.category is not None:
+            url += f"Random?Category={self.category}"
+            return url
+        else:
+            return self.url + "Random"
+
+    # Call the api based on URL.
+    def call_api(self, url):
+        response = requests.get(url, verify = False)
+        return response.json()
+
+    # Removes bad characters from the coub name.
+    def handle_coub_name(self, name):
+        return name.replace('|', ',').replace('/', '').replace('\\', '').replace(':', '').replace("http", '').replace("https", '').replace('?','').replace('*', '').replace('<', '').replace('>', '').replace('\'', '').replace('"', '')
+
+    # From the coub json, get the title and id of the coub.
+    def get_coub_info(self, coub_json):
+
+        base_url = "https://genresearcher.com/Videos/"
+
+        # Get the title, category, and originalCoubId from the coub json.
+        title = self.handle_coub_name(coub_json['title'])
+        originalCoubId = coub_json['originalCoubId']
+        category = coub_json['category']['title']
+
+        # Structure on the website is: 
+        # /Videos/CoubName_CoubId/CoubName_OriginalCoubId.mp4
+        # Meaning, we have a video folder, containing a coub folder, containing the coub video.
+        full_name = f"{title}_{originalCoubId}"
+
+        # URL encode the full_name.
+        full_name_encoded = urllib.parse.quote(full_name)
+
+        # Return the full url.
+        full_url = f"{base_url}{category}/{full_name_encoded}/{full_name_encoded}.mp4"
+
+        return full_url, full_name
+
+    # Get the reply based on the arguments.
+    def get_reply(self):
+        url = self.get_url()
+        response = self.call_api(url)
+        coub_info = self.get_coub_info(response)    # Gives us a direct link to the coub.
+
+        # Download the video based on the coub_info.
+        coub_identifier = coub_info[1]
+        #urllib.request.urlretrieve(coub_info[0], coub_identifier) # Params are URL and Name of local file.
+
+        # Variable called test_name contains url encoded string of "hello world".
+        test_name = urllib.parse.quote("❤Kiruya Momochi❤_2mfk0z.mp4")
+
+        urllib.request.urlretrieve(f"https://genresearcher.com/Videos/Anime/{test_name}", coub_identifier + ".mp4")
+        
+        return coub_identifier
