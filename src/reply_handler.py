@@ -43,10 +43,10 @@ class Reply:
 
             elif argument_array[0] == '-help':
                 return '''
-                !qoub -cat <category> -pop <nth-popular> -ord <order>
-                -cat: Category to search in.
-                -pop: Get the nth-most popular to search for.
-                -ord: Order to search for.
+                    !qoub -cat <category> -pop <nth-popular> -ord <order>
+                    -cat: Category to search in.
+                    -pop: Get the nth-most popular to search for.
+                    -ord: Order to search for.
                 '''
 
     # Get the url based on the arguments.
@@ -103,23 +103,19 @@ class Reply:
         full_name_encoded = urllib.parse.quote(full_name)
 
         # Return the full url.
-        full_url = f"{base_url}{category}/{full_name_encoded}/{full_name_encoded}.mp4"
+        full_url = f"{base_url}{category}/{full_name_encoded}.mp4"
+        #full_url = f"{base_url}{category}/{full_name_encoded}/{full_name_encoded}.mp4"
 
         return full_url, full_name
 
     # Get the reply based on the arguments.
     def get_reply(self):
+
         url = self.get_url()
         response = self.call_api(url)
         coub_info = self.get_coub_info(response)    # Gives us a direct link to the coub.
 
         # Download the video based on the coub_info.
-        coub_identifier = coub_info[1]
-        #urllib.request.urlretrieve(coub_info[0], coub_identifier) # Params are URL and Name of local file.
-
-        # Variable called test_name contains url encoded string of "hello world".
-        test_name = urllib.parse.quote("❤Kiruya Momochi❤_2mfk0z.mp4")
-
-        urllib.request.urlretrieve(f"https://genresearcher.com/Videos/Anime/{test_name}", coub_identifier + ".mp4")
+        urllib.request.urlretrieve(coub_info[0], coub_info[1] + ".mp4") # Params are URL and Name of local file.
         
-        return coub_identifier
+        return coub_info[1]

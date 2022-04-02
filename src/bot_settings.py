@@ -2,8 +2,8 @@ import json
 
 class BotSettings:
 
-    def __init__(self, path):
-        self.path = path
+    def __init__(self):
+        self.path = "settings/bot_settings.json"
         self.settings = self.load_settings()
 
     def load_settings(self):
