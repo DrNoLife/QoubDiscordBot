@@ -1,5 +1,5 @@
 # Ignore out settings.
-bot_settings.json
+src/settings/bot_settings.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

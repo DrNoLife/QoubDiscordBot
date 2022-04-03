@@ -77,7 +77,7 @@ class Reply:
 
     # Call the api based on URL.
     def call_api(self, url):
-        response = requests.get(url, verify = False)
+        response = requests.get(url)
         return response.json()
 
     # Removes bad characters from the coub name.
