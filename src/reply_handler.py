@@ -1,4 +1,3 @@
-from numpy import full
 import requests
 import urllib.parse
 import urllib.request
